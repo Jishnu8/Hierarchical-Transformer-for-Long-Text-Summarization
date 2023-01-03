@@ -39,7 +39,7 @@ If ``` dataset_path ``` is not specified, the default dataset used is [arxiv-dat
 
 The following link contains the final processed dataset for arxiv_dataset ready to be used for training: (link) 
 
-For more details regarding how the dataset to be used for training is created, refer to (this section).
+For more details regarding how the dataset to be used for training is created, refer to [this section](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization/edit/main/README.md#31-creating-dataset).
 
 ### 2.2 Training 
 Start pretraining or finetuning the model with: 
@@ -127,4 +127,29 @@ For more details regarding how the model is evaluted, refer to (this section)
 
 ## 3. Method
 
-## 4. Citations
+### 3.1 Creating Dataset 
+
+#### A brief note on extractive vs abstractive summarization 
+
+**Extractive summariztion** aims to identiy the most important phrases and lines from a document. These important lines are then combined to create a summary.
+
+On the hand, **abstractive summarization** aims to generate summaries that capture the salient features of a document. This method contrasts from the extractive approach as the summary could contain phrases and terms not present in the actual document. 
+
+#### How to create extractive summaries?
+
+Most summarization datasets contain only articles and their respective abstractive summaries. However in order to train our model to generate extractive summaries, we require the extractive summary for each article. Similar to [Nallapati et al. (2017)](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization/edit/main/README.md#4-references), we generate the extractive labels for each sentence so that they maximise the Rouge score with respect to the gold summaries (i.e the abstractive summary). This is done using a greedy algorithm where we add one sentence of the document at a time so that the Rouge score of the set of selected sentences at that time is maximised with respect to the gold summary. We stop this process either when adding a sentence to the summary does not increase the Rouge score or by setting a limit to the maximum number of sentences in a summary. While a greedy approach does not guarentee an extractive summary that maximises the Rouge score with respect to the gold summary, it provides us with a good approximation as generating the optimal extractive summary is computationally expensive.  
+
+### 3.2 Model Architecture
+
+### 3.3 Training 
+
+### 3.4 Evaluation
+
+## 4. References
+
+1. Ramesh Nallapati, Feifei Zhai, and Bowen Zhou. 2017.
+SummaRuNNer: [A recurrent neural network based
+sequence model for extractive summarization of
+documents](https://arxiv.org/pdf/1611.04230.pdf). *In Proceedings of the 31st AAAI Con-
+ference on Artificial Intelligence*, pages 3075–3081,
+San Francisco, California.
