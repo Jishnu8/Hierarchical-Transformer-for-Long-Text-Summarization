@@ -2,7 +2,7 @@
 A Hierarchical Transformer Encoder for Long Text Extractive Summarization by jointly learning salient and redundant features
 
 ## 1. Abstract
-Despite the advent of transformer architectures, document summarization has been limited to short texts (1024 to 2048 tokens at best) because of the quadratic computational and memory complexities of computing self attention. To this extent, the following repository proposes HiExtSumm, a novel hierarchichal transformer encoder for long text extractive summarization by jointly learning salient and redudant features. First, a sentence level encoder (e.g Bert) is used to learn embeddings for each sentence. Then the sentence embeddings are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. Attentive pooling is then used to extract a global document embedding which is then concatenated with the sentence embeddings to learn salient features. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss L<sub>ce</sub> and a redundancy loss term L<sub>rd</sub>. During evalution, an MMR-based selection process is used to generate variable-length extractive summaries.
+Despite the advent of transformer architectures, document summarization has been limited to short texts (1024 to 2048 tokens at best) because of the quadratic computational and memory complexities of computing self attention. To this extent, the following repository proposes HiExtSumm, a novel hierarchichal transformer encoder for long text extractive summarization by jointly learning salient and redudant features. First, a sentence level encoder (e.g Bert) is used to learn embeddings for each sentence. Then the sentence embeddings are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. Attentive pooling is then used to extract a global document embedding which is then concatenated with the sentence embeddings to learn salient features. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss L<sub>ce</sub> and a redundancy loss term L<sub>rd</sub>. During evalution, a modified version of the MMR-based selection process is used to generate variable-length extractive summaries.
 
 For more details regarding each step of the process, refer to each section below.
 
@@ -142,22 +142,25 @@ Most summarization datasets contain only articles and their respective abstracti
 
 ### 3.2 Model Architecture and Traning 
 
-A good extractive summarizer should pick sentences that highlight the salient features of a document while also taking into account redundancy. The importance of addressing redundancy in extractive summaries is particularly important for long documents as they tend to be substantially more redundant than short ones ([Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references)).
+A good extractive summarizer should pick sentences that highlight the salient features of a document while also taking into account redundancy. The importance of addressing redundancy in extractive summaries is particularly important for long documents as they tend to be substantially more redundant than short ones as discussed in [Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references).
 
 #### Architecture
 
-The diagram above depicts the entire model architecture. First, a sentence level encoder (Bert) is used to learn sentence **s<sub>i,1</sub>** embeddings for each sentence. Then all the **s<sub>i,1</sub>** combined with positional encodings p<sub>i</sub> are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. The document level encoder outputs document aware sentence representations **c<sub>i,1</sub>**. Attentive pooling is then used to extract a global document embedding **D**. Finally **D** and **c<sub>i,1</sub>** are concatenated and fed through a linear and sigmoid layer to get probabilities of the importance of sentence i with respect to the global context of the document. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss **L<sub>ce</sub>** and a redundancy loss term **L<sub>rd</sub>**. 
+The diagram above depicts the entire model architecture. First, a sentence level encoder (Bert) is used to learn sentence $s_{i,1}$ embeddings for each sentence. Then all the $s_{i,1}$ combined with positional encodings $p_{i}$ are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. The document level encoder outputs document aware sentence representations $c_{i,1}$. Attentive pooling is then used to extract a global document embedding $D$. Finally $D$ and $c_{i,1}$ are concatenated and fed through a linear and sigmoid layer to get probabilities of the importance of sentence i with respect to the global context of the document. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss $L_{ce}$ and a redundancy loss term $L_{rd}$. 
 
 #### Training Loss
 
-As mentioned above, the training loss consists of a combination of two loss terms, the cross entropy loss **L<sub>ce</sub>** and a redundancy loss term **L<sub>rd</sub>**. The expression of the redundancy loss as described in [Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references), is:
+As mentioned above, the training loss consists of a combination of two loss terms, the cross entropy loss $L_{ce}$ and a redundancy loss term $L_{rd}$. The expression of the redundancy loss as described in [Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references), is
 
+$$L_{rd}= \sum_{i=1}^n \sum_{j=1}^n P(y_{i})P(y_{j})Sim(s_{i},s_{j}) $$
 
-```
-
-```
+where $Sim(s_{i}, s_{j})$ is a similarity function measuring the redundancy between sentence $i$ and sentence $j$. In this work, we use the  cosine similarity function. It is clear from the expression of $L_{rd}$ that when two sentences are similar and have high salience scores, $L_{rd}$ is larger, penalizing the model.  
 
 ### 3.3 Evaluation
+
+MMR-Select is a simple method proposed by [Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references) that eliminates redundancy during the sentence selection process during evalution. However the process is limited to generating fixed length extractive summaries (i.e number of sentences in the summary is fixed). 
+
+To address this limitation, a modified and version of the MMR-Select method is proposed. Similar to the standard method, we calculate the MMR score of each sentence which is updated continuously after each sentence is selected. We pick the sentence with highest MMR score only if its score is greater than $λ*0.5$ where $λ$ is hyperparemter used in calculating the MMR score. Evidently, the selection stops when all sentences that are left have an MMR score less than $λ*0.5$.
 
 ## 4. References
 
