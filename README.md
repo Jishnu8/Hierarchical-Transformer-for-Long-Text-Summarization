@@ -2,7 +2,7 @@
 A Hierarchical Transformer Encoder for Long Text Extractive Summarization by jointly learning salient and redundant features
 
 ## 1. Abstract
-Despite the advent of transformer architectures, document summarization has been limited to short texts (1024 to 2048 tokens at best) because of the quadratic computational and memory complexities of computing self attention. To this extent, the following repository proposes HiExtSumm, a novel hierarchichal transformer encoder for long text extractive summarization by jointly learning salient and redudant features. First, a sentence level encoder (e.g Bert) is used to learn embeddings for each sentence. Then the sentence embeddings are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. Attentive pooling is then used to extract a global document embedding which is then concatenated with the sentence embeddings to learn salient features. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss Lce and a redundancy loss term Lrd. During evalution, an MMR-based selection process is used to generate variable-length extractive summaries.
+Despite the advent of transformer architectures, document summarization has been limited to short texts (1024 to 2048 tokens at best) because of the quadratic computational and memory complexities of computing self attention. To this extent, the following repository proposes HiExtSumm, a novel hierarchichal transformer encoder for long text extractive summarization by jointly learning salient and redudant features. First, a sentence level encoder (e.g Bert) is used to learn embeddings for each sentence. Then the sentence embeddings are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. Attentive pooling is then used to extract a global document embedding which is then concatenated with the sentence embeddings to learn salient features. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss L<sub>ce</sub> and a redundancy loss term L<sub>rd</sub>. During evalution, an MMR-based selection process is used to generate variable-length extractive summaries.
 
 For more details regarding each step of the process, refer to each section below.
 
@@ -140,11 +140,24 @@ On the hand, **abstractive summarization** aims to generate summaries that captu
 
 Most summarization datasets contain only articles and their respective abstractive summaries. However in order to train our model to generate extractive summaries, we require the extractive summary for each article. Similar to [Nallapati et al. (2017)](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references), we generate the extractive labels for each sentence so that they maximise the Rouge score with respect to the gold summaries (i.e the abstractive summary). This is done using a greedy algorithm where we add one sentence of the document at a time so that the Rouge score of the set of selected sentences at that time is maximised with respect to the gold summary. We stop this process either when adding a sentence to the summary does not increase the Rouge score or by setting a limit to the maximum number of sentences in a summary. While a greedy approach does not guarentee an extractive summary that maximises the Rouge score with respect to the gold summary, it provides us with a good approximation as generating the optimal extractive summary is computationally expensive.  
 
-### 3.2 Model Architecture
+### 3.2 Model Architecture and Traning 
 
-### 3.3 Training 
+A good extractive summarizer should pick sentences that highlight the salient features of a document while also taking into account redundancy. The importance of addressing redundancy in extractive summaries is particularly important for long documents as they tend to be substantially more redundant than short ones ([Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references)).
 
-### 3.4 Evaluation
+#### Architecture
+
+The diagram above depicts the entire model architecture. First, a sentence level encoder (Bert) is used to learn sentence **s<sub>i,1</sub>** embeddings for each sentence. Then all the **s<sub>i,1</sub>** combined with positional encodings p<sub>i</sub> are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. The document level encoder outputs document aware sentence representations **c<sub>i,1</sub>**. Attentive pooling is then used to extract a global document embedding **D**. Finally **D** and **c<sub>i,1</sub>** are concatenated and fed through a linear and sigmoid layer to get probabilities of the importance of sentence i with respect to the global context of the document. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss **L<sub>ce</sub>** and a redundancy loss term **L<sub>rd</sub>**. 
+
+#### Training Loss
+
+As mentioned above, the training loss consists of a combination of two loss terms, the cross entropy loss **L<sub>ce</sub>** and a redundancy loss term **L<sub>rd</sub>**. The expression of the redundancy loss as described in [Xiao and Carenini 2020](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#4-references), is:
+
+
+```
+
+```
+
+### 3.3 Evaluation
 
 ## 4. References
 
@@ -154,3 +167,11 @@ sequence model for extractive summarization of
 documents](https://arxiv.org/pdf/1611.04230.pdf). *In Proceedings of the 31st AAAI Con-
 ference on Artificial Intelligence*, pages 3075–3081,
 San Francisco, California.
+
+2. Wen Xiao and Giuseppe Carenini. 2019. [Extractive
+summarization of long documents by combining
+global and local context](https://arxiv.org/pdf/2012.00052.pdf)). In Proceedings of the
+2019 *Conference on Empirical Methods in Natural Language Processing and the 9th International
+Joint Conference on Natural Language Processing
+(EMNLP-IJCNLP)*, pages 3011–3021, Hong Kong,
+China. Association for Computational Linguistics.
