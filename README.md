@@ -146,6 +146,8 @@ A good extractive summarizer should pick sentences that highlight the salient fe
 
 #### Architecture
 
+<img src="https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization/blob/main/media/hiExtSumm.png" width="700" height="Auto">
+
 The diagram above depicts the entire model architecture. First, a sentence level encoder (Bert) is used to learn sentence $s_{i,1}$ embeddings for each sentence. Then all the $s_{i,1}$ combined with positional encodings $p_{i}$ are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. The document level encoder outputs document aware sentence representations $c_{i,1}$. Attentive pooling is then used to extract a global document embedding $D$. Finally $D$ and $c_{i,1}$ are concatenated and fed through a linear and sigmoid layer to get probabilities of the importance of sentence i with respect to the global context of the document. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss $L_{ce}$ and a redundancy loss term $L_{rd}$. 
 
 #### Training Loss
