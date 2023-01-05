@@ -1,10 +1,10 @@
 # Hierarchical Transformer for Long Text Summarization
 A Hierarchical Transformer Encoder for Long Text Extractive Summarization by jointly learning salient and redundant features
 
+
 ## 1. Abstract
 Despite the advent of transformer architectures, document summarization has been limited to short texts (1024 to 2048 tokens at best) because of the quadratic computational and memory complexities of computing self attention. To this extent, the following repository proposes HiExtSumm, a novel hierarchichal transformer encoder for long text extractive summarization by jointly learning salient and redudant features. First, a sentence level encoder (e.g Bert) is used to learn embeddings for each sentence. Then the sentence embeddings are fed through a document level encoder (2 self attention layers in this case) to learn the dependencies between sentences. Attentive pooling is then used to extract a global document embedding which is then concatenated with the sentence embeddings to learn salient features. The entire model is trained in an end-to-end fashion with a combination of two loss terms, the cross entropy loss L<sub>ce</sub> and a redundancy loss term L<sub>rd</sub>. During evalution, a modified version of the MMR-based selection process is used to generate variable-length extractive summaries.
 
-For more details regarding each step of the process, refer to each section below.
 
 ## 2. Usage
 ### 2.1 Create dataset
@@ -98,7 +98,7 @@ beta1 = 0.9
 beta2 = 0.999
 ```
 
-For more details regarding how the model is trained, refer to [3.2 Model Architecture](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#32-model-architecture) and [3.3 Training](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#33-training)
+For more details regarding how the model is trained, refer to [3.2 Model Architecture and Training](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#32-model-architecture-and-traning)
 
 ### 2.3 Testing 
 
@@ -124,7 +124,7 @@ usage: test.py [-h] [--extractive_summ_test_path EXTRACTIVE_SUMM_TEST_PATH]
 
 ```
 
-For more details regarding how the model is evaluted, refer to [3.3 Evaluation](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#34-evaluation)
+For more details regarding how the model is evaluted, refer to [3.3 Evaluation](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#33-evaluation)
 
 ## 3. Method
 
