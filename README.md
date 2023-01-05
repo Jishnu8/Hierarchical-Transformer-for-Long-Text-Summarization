@@ -178,3 +178,20 @@ global and local context](https://arxiv.org/pdf/2012.00052.pdf)). In Proceedings
 Joint Conference on Natural Language Processing
 (EMNLP-IJCNLP)*, pages 3011–3021, Hong Kong,
 China. Association for Computational Linguistics.
+
+## 5. How to Cite?
+
+If you use or extend this work, please cite it as below:
+
+
+```
+@software{Parayil_Shibu_Hierarchical-Transformer-for-Long-Text-Summarization_2023,
+  author = {Parayil Shibu, Jishnu},
+  month = {1},
+  title = {{Hierarchical-Transformer-for-Long-Text-Summarization}},
+  url = {https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization},
+  version = {1.0.0},
+  year = {2023}
+}
+
+```
