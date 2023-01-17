@@ -6,7 +6,7 @@ def load_data_from_json(path, splits=1):
     data = load_dataset("json",data_files=path, split="train")
   else:
     for i in range(splits):
-      temp_path =  path[0:len(path) - 8] + str(i + 1) + path[len(path) - 8:len(path)]
+      temp_path =  path[0:len(path) - 5] + str(i + 1) + path[len(path) - 5:len(path)]
       temp_data = load_dataset("json",data_files=temp_path, split="train")
       if (i != 0):
         data = concatenate_datasets([data, temp_data])
