@@ -37,7 +37,7 @@ usage: create_ext_sum_dataset.py [-h] [--dataset_path DATASET_PATH]
 ```
 If ``` dataset_path ``` is not specified, the default dataset used is [arxiv-dataset](https://huggingface.co/datasets/ccdv/arxiv-summarization). When specifying a custom dataset, the format of the [arxiv-dataset](https://huggingface.co/datasets/ccdv/arxiv-summarization) must be used. 
 
-The following link contains the final processed dataset for arxiv_dataset ready to be used for training: (link) 
+The following link contains the final processed dataset for arxiv_dataset ready to be used for training: [arxiv_processed_data](https://icedrive.net/s/5hazXhBRAzzBT43jtx4a35zfNQGQ) 
 
 For more details regarding how the dataset to be used for training is created, refer to [3.1 Creating Dataset](https://github.com/Jishnu8/Hierarchical-Transformer-for-Long-Text-Summarization#31-creating-dataset).
 
